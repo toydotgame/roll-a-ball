@@ -8,6 +8,7 @@ public class CameraController : MonoBehaviour {
 
     void Start() {
         offset = transform.position - player.transform.position;
+		Debug.Log("Initialised camera with offset " + offset + ".");
     }
 
     void LateUpdate() {

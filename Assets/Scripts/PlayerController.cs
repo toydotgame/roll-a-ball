@@ -18,4 +18,12 @@ public class PlayerController : MonoBehaviour {
     void FixedUpdate() {
         playerRigidbody.AddForce(new Vector3(movementX, 0f, movementY) * movementSpeed);
     }
+
+	void OnTriggerEnter(Collider other) {
+		Debug.Log("Collided with trigger with tag \"" + other.gameObject.tag + "\"");
+
+		if(other.gameObject.CompareTag("Pickup")) {
+			other.gameObject.SetActive(false);
+		}
+	}
 }

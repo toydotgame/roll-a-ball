@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour {
 	private int count = 0;
 	public TextMeshProUGUI countText;
 	public TextMeshProUGUI winText;
+	public static bool winState = false;
 
 	private void Start() {
 		SetCountText();
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviour {
 
 		if(count >= 14) { // There are 14 pickups in the level, thus ≥ 14 must be collected for a win state to occur.
 			winText.gameObject.SetActive(true);
+			winState = true;
 		}
 	}
 

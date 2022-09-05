@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Pickup
+  - LeftGround
+  - RightGround
   layers:
   - Default
   - TransparentFX

@@ -38,14 +38,14 @@ public class PlayerController : MonoBehaviour {
 			count++;
 			SetCountText();
 
-			if(count >= 1) { // There are 14 pickups in the level, thus ≥ 14 must be collected for a win state to occur.
+			if(count >= 14) { // There are 14 pickups in the level, thus ≥ 14 must be collected for a win state to occur.
 				winText.gameObject.SetActive(true);
 				winState = true;
 			}
 		}
 		
 		if(other.gameObject.CompareTag("Level2Load")) {
-			SceneManager.LoadScene("Level2");
+			SceneManager.LoadScene("Level2"); // TODO: Level 2 level design.
 		}
 	}
 

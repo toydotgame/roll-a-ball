@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class PlayerController : MonoBehaviour {
@@ -36,11 +37,15 @@ public class PlayerController : MonoBehaviour {
 			other.gameObject.SetActive(false);
 			count++;
 			SetCountText();
-		}
 
-		if(count >= 14) { // There are 14 pickups in the level, thus ≥ 14 must be collected for a win state to occur.
-			winText.gameObject.SetActive(true);
-			winState = true;
+			if(count >= 14) { // There are 14 pickups in the level, thus ≥ 14 must be collected for a win state to occur.
+				winText.gameObject.SetActive(true);
+				winState = true;
+			}
+		}
+		
+		if(other.gameObject.CompareTag("Level2Load")) {
+			SceneManager.LoadScene("Level2");
 		}
 	}
 

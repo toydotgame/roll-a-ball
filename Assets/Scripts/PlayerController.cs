@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour {
 	public TextMeshProUGUI countText;
 	public TextMeshProUGUI winText;
 	public static bool winState = false;
+	private int winCount = 14;
+	private int level2WinCount = 2;
 
 	private void Start() {
 		SetCountText();
@@ -31,26 +33,40 @@ public class PlayerController : MonoBehaviour {
     }
 
 	void OnTriggerEnter(Collider other) {
-		Debug.Log("Collided with trigger with tag \"" + other.gameObject.tag + "\"");
+		switch(other.gameObject.tag) {
+			case "Pickup":
+				other.gameObject.SetActive(false);
+				count++;
+				SetCountText();
 
-		if(other.gameObject.CompareTag("Pickup")) {
-			other.gameObject.SetActive(false);
-			count++;
-			SetCountText();
+				if(SceneManager.GetActiveScene().name == "MiniGame") {
+					if(count >= winCount) { // There are 14 pickups in the level, thus ≥ 14 must be collected for a win state to occur.
+						winText.gameObject.SetActive(true);
+						winState = true;
+					}
+				} else { // Implies "Level2" is the active scene.
+					if(count >= level2WinCount) {
+						winText.gameObject.SetActive(true);
+						winState = true; // TODO: Redundant AFAIK.
+					}
+				}
 
-			if(count >= 14) { // There are 14 pickups in the level, thus ≥ 14 must be collected for a win state to occur.
-				winText.gameObject.SetActive(true);
-				winState = true;
-			}
-		}
-		
-		if(other.gameObject.CompareTag("Level2Load")) {
-			SceneManager.LoadScene("Level2"); // TODO: Level 2 level design.
+				break;
+			case "Level2Load":
+				SceneManager.LoadScene("Level2");
+
+				break;
+			case "Death":
+				SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+				break;
+			default:
+				Debug.Log("Collided with unknown trigger with tag \"" + other.gameObject.tag + "\"");
+				break;
 		}
 	}
 
 	void SetCountText() {
 		countText.text = "Score: " + count.ToString();
-		Debug.Log("Updated countText.text score to " + count.ToString());
+		//Debug.Log("Updated countText.text score to " + count.ToString());
 	}
 }

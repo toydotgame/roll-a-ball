@@ -6,12 +6,12 @@ public class CameraController : MonoBehaviour {
     private Vector3 offset;
     public GameObject player;
 
-    void Start() {
+    private	void Start() {
         offset = transform.position - player.transform.position;
 		Debug.Log("Initialised camera with offset " + offset + ".");
     }
 
-    void LateUpdate() {
+    private void LateUpdate() {
         transform.position = player.transform.position + offset;
     }
 }

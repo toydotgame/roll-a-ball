@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PickupRotator : MonoBehaviour {
-	void Update() {
+	private void Update() {
 		transform.Rotate(new Vector3(15, 30, 45) * Time.deltaTime);
 	}
 }

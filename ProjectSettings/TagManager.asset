@@ -9,6 +9,7 @@ TagManager:
   - RightGround
   - Level2Load
   - Death
+  - GenericGround
   layers:
   - Default
   - TransparentFX

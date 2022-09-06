@@ -6,6 +6,12 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+/*
+ * CREATED: 2022-07-26
+ * AUTHOR: toydotgame
+ * Player and game controller script. Handles player movement, handling the score and win state, and handling triggers.
+ */
+
 public class PlayerController : MonoBehaviour {
     public Rigidbody playerRigidbody;
     private float movementX;
@@ -15,21 +21,23 @@ public class PlayerController : MonoBehaviour {
 	public TextMeshProUGUI countText;
 	public TextMeshProUGUI winText;
 	public static bool winState = false;
-	private int level1winCount = 14;
-	private int level2WinCount = 20;
 	private int winCount;
 
 	private void Start() {
-		SetCountText();
-		winText.gameObject.SetActive(false);
-
-		if(SceneManager.GetActiveScene().name == "MiniGame") {
-			// Level 1 win count is 14:
-			winCount = level1winCount;
-		} else {
-			// Level 2 win count is 20:
-			winCount = level2WinCount;
+		switch(SceneManager.GetActiveScene().name) {
+			case "Level 1":
+				winCount = 14;
+				break;
+			case "Level 2":
+				winCount = 20;
+				break;
+			default:
+				// A win count of 0 may bring bugs into play regarding when the win text is triggered.
+				winCount = 1;
+				break;
 		}
+		
+		UpdateCountText();
 	}
 
 	private void OnMove(InputValue movementValue) {
@@ -47,28 +55,24 @@ public class PlayerController : MonoBehaviour {
 			case "Pickup":
 				other.gameObject.SetActive(false);
 				count++;
-				SetCountText();
+				Debug.Log("Collided with Pickup GameObject; score is now " + count + "/" + winCount);
+				UpdateCountText();
 
-				if(SceneManager.GetActiveScene().name == "MiniGame") {
-					if(count >= winCount) { // There are 14 pickups in the level, thus ≥ 14 must be collected for a win state to occur.
-						winText.gameObject.SetActive(true);
-						winState = true;
-					}
-				} else { // Implies "Level2" is the active scene.
-					if(count >= winCount) {
-						winText.gameObject.SetActive(true);
-						winState = true;
-					}
+				if(count >= winCount) {
+					winText.gameObject.SetActive(true);
+					winState = true;
 				}
 
 				break;
-			case "Level2Load":
+			case "LevelLoad": // Currently ambiguous name because there's only two levels.
+				// The win state must be cleared on level load because IIRC this variable is stored in DontDestroyOnLoad.
 				winState = false;
-				SceneManager.LoadScene("Level2");
-
+				SceneManager.LoadScene("Level 2");
 				break;
 			case "Death":
-				SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+				if(!winState) {
+					SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reloads the scene.
+				}
 				break;
 			default:
 				Debug.Log("Collided with unknown trigger with tag \"" + other.gameObject.tag + "\"");
@@ -76,8 +80,7 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	private void SetCountText() {
+	private void UpdateCountText() {
 		countText.text = "Score: " + count.ToString() + "/" + winCount;
-		//Debug.Log("Updated countText.text score to " + count.ToString());
 	}
 }

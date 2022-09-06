@@ -4,6 +4,12 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+ * CREATED: 2022-09-05
+ * AUTHOR: toydotgame
+ * Handles animations per level and also deals with exiting the game [from the second level].
+ */
+
 public class FloorOpener : MonoBehaviour {
 	public GameObject leftFloor;
 	public GameObject rightFloor;
@@ -12,27 +18,32 @@ public class FloorOpener : MonoBehaviour {
 	private bool readyToQuit;
 
 	private void Update() {
-		if(SceneManager.GetActiveScene().name == "MiniGame") {
-			if(PlayerController.winState) {
+		// Level-specific animations:
+		switch(SceneManager.GetActiveScene().name) {
+			case "Level 1":
+				if(!PlayerController.winState) {
+					break;
+				}
+				// Rotate the floor until it is 90° vertical:
 				if(rightFloor.transform.rotation.eulerAngles.z < 90) {
 					leftFloor.transform.Rotate(0, 0, -1 * rotationSpeed);
 					rightFloor.transform.Rotate(0, 0, 1 * rotationSpeed);
 				}
-			}
-		} else { // Level 2.
-			if(PlayerController.winState) {
-				Debug.Log(PlayerController.winState);
-				if(genericFloor.transform.rotation.eulerAngles.z <= 6) { // Rounding issue if it's 5 for some reason.
+				break;
+			case "Level 2":
+				// Animate the floor to move from its [starting] tilted position to a flat position, filling the play area up to the walls:
+				if(genericFloor.transform.rotation.eulerAngles.z < 6) { // Rounding issue in the Editor won't accept 5.
 					genericFloor.transform.Rotate(0, 0, -1 * rotationSpeed);
-				} else if(genericFloor.transform.position.x > 0) { // Re-center floor.
+				} else if(genericFloor.transform.position.x > 0) {
 					genericFloor.transform.Translate(new Vector3(-1 * rotationSpeed, 0, 0));
-				} else if(genericFloor.transform.localScale.x < 40) { // Re-scale floor to fit borders.
+				} else if(genericFloor.transform.localScale.x < 40) {
 					genericFloor.transform.localScale += new Vector3(1 * rotationSpeed, 0, 0);
 				} else {
+					// When all other conditions are met, quit the game:
 					Thread childThread = new Thread(new ThreadStart(QuitCountdown));
 					childThread.Start();
 				}
-			}
+				break;
 		}
 
 		if(readyToQuit) {
@@ -41,8 +52,8 @@ public class FloorOpener : MonoBehaviour {
 		}
 	}
 
+	// This is run on a seperate thread:
 	public void QuitCountdown() {
-		// This code is run on a seperate thread so the Sleep() is threadsafe (as opposed to running on the EDT).
 		Thread.Sleep(3000);
 		readyToQuit = true;
 	}

@@ -50,7 +50,7 @@ public class FloorOpener : MonoBehaviour {
 		}
 
 		if(readyToQuit) {
-			UnityEditor.EditorApplication.isPlaying = false; // Needed to quit the game in the Editor.
+			//UnityEditor.EditorApplication.isPlaying = false; // Needed to quit the game in the Editor.
 			Application.Quit();
 		}
 	}

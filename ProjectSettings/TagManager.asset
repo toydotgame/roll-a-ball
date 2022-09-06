@@ -5,11 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Pickup
-  - LeftGround
-  - RightGround
   - Level2Load
   - Death
-  - GenericGround
   layers:
   - Default
   - TransparentFX

@@ -31,6 +31,9 @@ public class FloorOpener : MonoBehaviour {
 				}
 				break;
 			case "Level 2":
+				if(!PlayerController.winState) {
+					break;
+				}
 				// Animate the floor to move from its [starting] tilted position to a flat position, filling the play area up to the walls:
 				if(genericFloor.transform.rotation.eulerAngles.z < 6) { // Rounding issue in the Editor won't accept 5.
 					genericFloor.transform.Rotate(0, 0, -1 * rotationSpeed);

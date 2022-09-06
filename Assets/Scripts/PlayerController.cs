@@ -64,9 +64,10 @@ public class PlayerController : MonoBehaviour {
 				}
 
 				break;
-			case "Level2Load": // Currently ambiguous name because there's only two levels.
-				// The win state must be cleared on level load because IIRC this variable is stored in DontDestroyOnLoad.
+			case "Level2Load":
+				// Update win conditions when loading Level 2:
 				winState = false;
+
 				SceneManager.LoadScene("Level 2");
 				break;
 			case "Death":

@@ -15,12 +15,21 @@ public class PlayerController : MonoBehaviour {
 	public TextMeshProUGUI countText;
 	public TextMeshProUGUI winText;
 	public static bool winState = false;
-	private int winCount = 1;
-	private int level2WinCount = 2;
+	private int level1winCount = 14;
+	private int level2WinCount = 20;
+	private int winCount;
 
 	private void Start() {
 		SetCountText();
 		winText.gameObject.SetActive(false);
+
+		if(SceneManager.GetActiveScene().name == "MiniGame") {
+			// Level 1 win count is 14:
+			winCount = level1winCount;
+		} else {
+			// Level 2 win count is 20:
+			winCount = level2WinCount;
+		}
 	}
 
 	private void OnMove(InputValue movementValue) {
@@ -46,7 +55,7 @@ public class PlayerController : MonoBehaviour {
 						winState = true;
 					}
 				} else { // Implies "Level2" is the active scene.
-					if(count >= level2WinCount) {
+					if(count >= winCount) {
 						winText.gameObject.SetActive(true);
 						winState = true;
 					}
@@ -68,7 +77,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void SetCountText() {
-		countText.text = "Score: " + count.ToString();
+		countText.text = "Score: " + count.ToString() + "/" + winCount;
 		//Debug.Log("Updated countText.text score to " + count.ToString());
 	}
 }
